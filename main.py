@@ -6,19 +6,30 @@ from kivy.uix.scatter import Scatter
 from kivy.uix.textinput import TextInput
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
-import pandas as pd
 from kivy.properties import ListProperty
 from kivy.graphics.vertex_instructions import (Rectangle,
                                                Ellipse,
                                                Line)
 from kivy.graphics.context_instructions import Color
 import random
+import requests
 
 def getRandomWord():
     """ Return a random word """
-    data = pd.read_csv("words.txt")
-    random_word = data.sample(n=1)
-    random_word = (random_word.iloc[0]['words'])
+    API_KEY = 'VW09X3OE'
+    URL = 'https://random-word-api.herokuapp.com/word'
+    # defining a params dict for the parameters to be sent to the API 
+    PARAMS = {'key':API_KEY, 'number': 1}
+  
+    # sending get request and saving the response as response object 
+    r = requests.get(url = URL, params = PARAMS)
+
+    data = r.json()
+    random_word = data[0]
+
+    # data = pd.read_csv("words.txt")
+    # random_word = data.sample(n=1)
+    # random_word = (random_word.iloc[0]['words'])
 
     return random_word
 
